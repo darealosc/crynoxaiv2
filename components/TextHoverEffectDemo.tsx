@@ -33,7 +33,7 @@ export function TextHoverEffectDemo() {
         }}
         className="absolute inset-0 -z-10"
       />
-      <TextHoverEffect text="Crynox" className="text-white" />
+      <TextHoverEffect text="learn.ai" />
     </div>
   );
 }

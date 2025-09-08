@@ -1,28 +1,30 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "./ui/sidebar";
-import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown } from "lucide-react";
+import { Home, Bot, Hammer, LayoutDashboard, Settings, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TextHoverEffectDemo } from "./TextHoverEffectDemo"
-
+import { usePathname } from "next/navigation";
+import "../app/globals.css";
+import { BackgroundBoxesDemo } from "./BackgroundBoxesDemo";
 const THEMES = {
   light: { name: "Light" },
   dark: { name: "Dark" },
   rosepine: { name: "Rose Pine" },
 };
 
-export function SidebarDemo({ children }: { children?: React.ReactNode }) {
+export function SidebarDemo1({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(true);
   const [hovered, setHovered] = useState(false);
   const [theme, setTheme] = useState("rosepine");
+  const pathname = usePathname();
 
-const mainLinks = [
-  { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
-  { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },     
-  { label: "AI", href: "/", icon: <Bot className="h-5 w-5" /> },
-  { label: "Others", href: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
-];
-
+  const mainLinks = [
+    { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
+    { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },
+    { label: "AI", href: "/", icon: <Bot className="h-5 w-5" /> },
+    { label: "Others", href: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
+  ];
 
   const bottomLinks = [
     { label: "Settings", href: "/", icon: <Settings className="h-5 w-5" /> },
@@ -30,14 +32,18 @@ const mainLinks = [
 
   return (
     <div className="flex w-full h-screen transition-colors">
-      <Sidebar
-        open={open}
-        setOpen={setOpen}
-        animate
-        className="relative"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
+    <Sidebar
+      open={open}
+      setOpen={setOpen}
+     animate 
+     className={cn(
+    "relative transition-all duration-300",
+    hovered ? "w-50" : "w-50" 
+  )}
+  onMouseEnter={() => setHovered(true)}
+  onMouseLeave={() => setHovered(false)}
+>
+
         <SidebarBody className="flex flex-col justify-between h-full py-4 px-3 relative">
           <div className="flex flex-col gap-6">
             <LogoWithText />
@@ -49,7 +55,8 @@ const mainLinks = [
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 rounded-lg transition-all",
                     "hover:bg-base-200 dark:hover:bg-neutral-800",
-                    "text-gray-800 dark:text-gray-200"
+                    "text-gray-800 dark:text-gray-200",
+                    pathname === link.href ? "active" : ""
                   )}
                 />
               ))}
@@ -64,12 +71,7 @@ const mainLinks = [
                 className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-base-200 dark:hover:bg-neutral-800 text-gray-800 dark:text-gray-200"
               />
             ))}
-
-            <CustomDropdown
-              hovered={hovered}
-              theme={theme}
-              setTheme={setTheme}
-            />
+            <CustomDropdown hovered={hovered} theme={theme} setTheme={setTheme} />
           </div>
         </SidebarBody>
       </Sidebar>
@@ -165,6 +167,6 @@ const LogoWithText = () => {
 
 const Dashboard = () => (
   <div className="flex flex-col items-center justify-center w-full h-full gap-6 rounded-md">
-    < TextHoverEffectDemo />
+    <BackgroundBoxesDemo />
   </div>
 );
