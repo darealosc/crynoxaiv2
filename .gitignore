@@ -1,3 +1,6 @@
+# SSH keys
+mykey.txt.pub
+
 # Node modules
 node_modules/
 
