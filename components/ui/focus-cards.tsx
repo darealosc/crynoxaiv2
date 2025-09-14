@@ -49,7 +49,7 @@ type Card = {
   src: string;
 };
 
-export function FocusCards({ cards }: { cards: Card[] }) {
+export function FocusCards({ cards = [] }: { cards?: Card[] }) {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (

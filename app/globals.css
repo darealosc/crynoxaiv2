@@ -38,3 +38,23 @@ a.active {
   background-color: #1f2937;
   color: #f3f4f6;
 }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 9999px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #60a5fa;
+  box-shadow: 0 0 6px #60a5fa;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a transparent;
+}

@@ -5,8 +5,9 @@ import { Home, Bot, Hammer, LayoutDashboard, Settings, ChevronDown } from "lucid
 import { cn } from "@/lib/utils";
 import { TextHoverEffectDemo } from "./TextHoverEffectDemo"
 import { usePathname } from "next/navigation";
-import "../app/globals.css";
 import { BackgroundBoxesDemo } from "./BackgroundBoxesDemo";
+import "../app/globals.css";
+
 const THEMES = {
   light: { name: "Light" },
   dark: { name: "Dark" },
@@ -167,6 +168,8 @@ const LogoWithText = () => {
 
 const Dashboard = () => (
   <div className="flex flex-col items-center justify-center w-full h-full gap-6 rounded-md">
-    <BackgroundBoxesDemo />
+    <div>
+      
+    </div>
   </div>
 );

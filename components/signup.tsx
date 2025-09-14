@@ -1,28 +1,20 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "./ui/sidebar";
-import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown } from "lucide-react";
+import { Home, Bot, Hammer, LayoutDashboard, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TextHoverEffectDemo } from "./TextHoverEffectDemo"
+import { TextHoverEffectDemo } from "./TextHoverEffectDemo";
 
-const THEMES = {
-  light: { name: "Light" },
-  dark: { name: "Dark" },
-  rosepine: { name: "Rose Pine" },
-};
-
-export function SidebarDemo({ children }: { children?: React.ReactNode }) {
+export function Signup({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(true);
   const [hovered, setHovered] = useState(false);
-  const [theme, setTheme] = useState("rosepine");
 
-const mainLinks = [
-  { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
-  { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },     
+  const mainLinks = [
+    { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
+    { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },
     { label: "AI", href: "/pages/ai", icon: <Bot className="h-5 w-5" /> },
-  { label: "Others", href: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
-];
-
+    { label: "Others", href: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
+  ];
 
   const bottomLinks = [
     { label: "Settings", href: "/", icon: <Settings className="h-5 w-5" /> },
@@ -55,7 +47,6 @@ const mainLinks = [
               ))}
             </div>
           </div>
-
           <div className="flex flex-col gap-1 relative">
             {bottomLinks.map((link, idx) => (
               <SidebarLink
@@ -64,77 +55,15 @@ const mainLinks = [
                 className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-base-200 dark:hover:bg-neutral-800 text-gray-800 dark:text-gray-200"
               />
             ))}
-
-            <CustomDropdown
-              hovered={hovered}
-              theme={theme}
-              setTheme={setTheme}
-            />
           </div>
         </SidebarBody>
       </Sidebar>
-
       <main className="flex flex-1 p-6 md:p-10 rounded-xl shadow-inner overflow-auto">
         {children ?? <Dashboard />}
       </main>
     </div>
   );
 }
-
-const CustomDropdown = ({
-  hovered,
-  theme,
-  setTheme,
-}: {
-  hovered: boolean;
-  theme: string;
-  setTheme: (val: string) => void;
-}) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div
-      className={cn(
-        "absolute bottom-14 left-0 right-0 px-3 transition-all duration-300",
-        hovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"
-      )}
-    >
-      <div className="relative">
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-full flex items-center justify-between bg-base-200 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-lg shadow-md"
-        >
-          <ChevronDown
-            className={cn(
-              "h-4 w-4 transition-transform",
-              open ? "rotate-180" : "rotate-0"
-            )}
-          />
-        </button>
-
-        {open && (
-          <ul className="absolute left-0 right-0 mt-2 bg-base-100 dark:bg-neutral-900 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 z-50">
-            {Object.entries(THEMES).map(([key, val]) => (
-              <li
-                key={key}
-                onClick={() => {
-                  setTheme(key);
-                  setOpen(false);
-                }}
-                className={cn(
-                  "px-3 py-2 cursor-pointer hover:bg-base-200 dark:hover:bg-neutral-800 rounded-md",
-                  theme === key ? "font-semibold bg-base-200 dark:bg-neutral-800" : ""
-                )}
-              >
-                {val.name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-};
 
 const LogoWithText = () => {
   const { open, animate } = useSidebar();
@@ -165,6 +94,6 @@ const LogoWithText = () => {
 
 const Dashboard = () => (
   <div className="flex flex-col items-center justify-center w-full h-full gap-6 rounded-md">
-    < TextHoverEffectDemo />
+    
   </div>
 );

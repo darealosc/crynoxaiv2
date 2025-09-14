@@ -9,7 +9,7 @@ import "../app/globals.css";
 export function AISidebar({ children }: { children?: React.ReactNode }) {
   const mainLinks = [
 
-    { label: "AI", href: "/ai", icon: <Bot className="h-4 w-4 text-neutral-700 dark:text-neutral-200" /> },
+    { label: "AI", href: "/pages/ai", icon: <Bot className="h-5 w-5" /> },
     { label: "Tools", href: "#", icon: <Hammer className="h-4 w-4 text-neutral-700 dark:text-neutral-200" /> },
     { label: "Chat", href: "#", icon: <MessageSquare className="h-4 w-4 text-neutral-700 dark:text-neutral-200" /> },
     { label: "Settings", href: "#", icon: <Settings className="h-4 w-4 text-neutral-700 dark:text-neutral-200" /> },

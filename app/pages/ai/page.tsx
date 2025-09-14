@@ -1,11 +1,10 @@
-import { SidebarDemo } from "@/components/SidebarDemo";
+import Aiapp from "@/components/ai";
 import Chat from "@/components/Chat";
-import { Signup } from "@/components/signup";
 
 export default function Home() {
   return (
     <div className="flex h-screen">
-      <Signup />
+      <Aiapp />
     </div>
   );
 }

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "asdefsfs",
+  title: "learnai",
   description: "Idk what to put here :p",
 };
 

@@ -10,16 +10,24 @@
   },
   "dependencies": {
     "@tabler/icons-react": "^3.34.1",
+    "axios": "^1.12.1",
+    "body-parser": "^2.2.0",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
     "daisyui": "^5.1.7",
+    "express": "^5.1.0",
     "groq-sdk": "^0.32.0",
     "lucide-react": "^0.542.0",
     "motion": "^12.23.12",
     "next": "15.5.2",
+    "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^15.6.6",
     "react-tsparticles": "^2.12.2",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.3.1",
     "tsparticles": "^3.9.1"
   },
@@ -27,11 +35,29 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.15.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AarushKamatCodeRVA/crynoxaiv2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AarushKamatCodeRVA/crynoxaiv2/issues"
+  },
+  "homepage": "https://github.com/AarushKamatCodeRVA/crynoxaiv2#readme"
 }
