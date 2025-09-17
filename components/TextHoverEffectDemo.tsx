@@ -11,7 +11,7 @@ export function TextHoverEffectDemo() {
   };
 
   return (
-    <div className="relative h-[600rem] flex items-center justify-center bg-black rounded-2xl">
+    <div className="relative h-[600rem] flex items-center justify-center rounded-2xl">
       <Particles
         id="tsparticles"
         init={particlesInit}
