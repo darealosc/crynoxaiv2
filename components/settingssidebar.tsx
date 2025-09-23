@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
+import Dashboard from "./ai";
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
-import { Bot, Hammer, MessageSquare, Settings } from "lucide-react"; // updated icons
+import { Bot, Hammer, MessageSquare, Settings } from "lucide-react"; 
 import { cn } from "@/lib/utils";
 import "../app/globals.css";
 
 
 export function AISidebar({ children }: { children?: React.ReactNode }) {
   const mainLinks = [
-
     { label: "AI", href: "/pages/ai", icon: <Bot className="h-5 w-5" /> },
     { label: "Tools", href: "#", icon: <Hammer className="h-4 w-4 text-neutral-700 dark:text-neutral-200" /> },
     { label: "Chat", href: "#", icon: <MessageSquare className="h-4 w-4 text-neutral-700 dark:text-neutral-200" /> },
@@ -30,7 +30,8 @@ export function AISidebar({ children }: { children?: React.ReactNode }) {
         </SidebarBody>
       </Sidebar>
 
-      <div className="flex flex-1 p-6 md:p-10 bg-white dark:bg-neutral-900 rounded-md">
+      {/* ✅ Show children if provided, otherwise fall back to Dashboard */}
+      <div className="flex flex-1 p-6 md:p-10 bg-white dark:bg-neutral-900 rounded-md overflow-hidden">
         {children ?? <Dashboard />}
       </div>
     </div>
@@ -45,10 +46,4 @@ export const LogoIcon = () => (
       className="object-cover w-full h-full rounded-md"
     />
   </a>
-);
-
-const Dashboard = () => (
-  <div className="flex items-center justify-center w-full h-full">
-
-  </div>
 );

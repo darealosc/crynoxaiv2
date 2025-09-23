@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { SidebarDemo1 } from "./tools";
-import { Clipboard, Plus, Trash2 } from "lucide-react";
+import { Clipboard, Trash2, Plus } from "lucide-react";
 import "../app/globals.css";
 
 const CopyButton = ({ code }: { code: string }) => {
@@ -169,13 +168,15 @@ const Dashboard = () => {
       : chats.find((c) => c.id === activeChat)?.history || [];
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full p-4">
+    <div className="flex items-center justify-center min-h-screen w-full p-4 bg-[#181818]">
       <div className="flex flex-row w-full max-w-6xl h-[90vh] mx-auto gap-4">
+        {/* Chat list */}
         <div className="w-[320px] flex flex-col bg-[#181818] rounded-xl p-4 shadow border border-[#333] h-full">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={newChat}
               className="p-2 rounded bg-[#222] text-white text-lg"
+              title="New Chat"
             >
               <Plus />
             </button>
@@ -183,6 +184,7 @@ const Dashboard = () => {
               <button
                 onClick={() => deleteChat(activeChat)}
                 className="p-2 rounded bg-[#222] text-red-400"
+                title="Delete Chat"
               >
                 <Trash2 />
               </button>
@@ -205,6 +207,7 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+        {/* Main chat area */}
         <div className="flex flex-col flex-1 h-full bg-[#222] rounded-xl shadow border border-[#333]">
           <div className="flex-1 px-6 py-6 overflow-y-auto">
             {activeHistory.length === 0 && (
@@ -278,7 +281,7 @@ const Dashboard = () => {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <div className="px-6 py-4 border-t border-[#333] bg-[#181818] flex gap-2 rounded-md">
+          <div className="px-6 py-4 border-t border-[#333] bg-[#181818] flex gap-2 rounded-b-2xl rounded-t-3xl">
             <input
               type="text"
               className="flex-1 h-12 px-4 rounded-md bg-[#222] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -304,9 +307,5 @@ const Dashboard = () => {
 };
 
 export default function AIPage() {
-  return (
-    <SidebarDemo1>
-      <Dashboard />
-    </SidebarDemo1>
-  );
+  return <Dashboard />;
 }

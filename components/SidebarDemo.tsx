@@ -4,7 +4,8 @@ import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "./ui/sidebar";
 import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TextHoverEffectDemo } from "./TextHoverEffectDemo"
-
+import "../app/globals.css";
+import { signup } from "./form";
 const THEMES = {
   light: { name: "Light" },
   dark: { name: "Dark" },
@@ -164,7 +165,7 @@ const LogoWithText = () => {
 };
 
 const Dashboard = () => (
-  <div className="flex flex-col items-center justify-center w-full h-full gap-6 rounded-md">
-    < TextHoverEffectDemo />
+  <div>
+    {signup()}
   </div>
 );
