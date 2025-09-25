@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { Pool } from "pg";
 
-// Set up Postgres connection
+// Hardcoded DB credentials
 const pool = new Pool({
   user: "postgres",
-  host: "81.0.219.54", 
+  host: "81.0.219.54",
   database: "userdb",
-  password: "darealosc", 
+  password: "darealosc",
   port: 5432,
 });
 
@@ -20,12 +20,15 @@ export async function POST(req: Request) {
 
     const client = await pool.connect();
     try {
-      // Insert into users table
+      // Insert into users table (without first_name and last_name)
       const result = await client.query(
         "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id",
         [username, email, password]
       );
-      return NextResponse.json({ success: true, id: result.rows[0].id });
+      return NextResponse.json({
+        success: true,
+        id: result.rows[0].id,
+      });
     } catch (dbErr: any) {
       console.error('Postgres error:', dbErr);
       let errorMsg = "Signup failed.";

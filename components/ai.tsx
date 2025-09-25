@@ -31,6 +31,7 @@ const Dashboard = () => {
     { id: number; history: { role: "user" | "assistant"; content: string }[] }[]
   >([]);
   const [activeChat, setActiveChat] = useState<number | null>(null);
+  const [firstName, setFirstName] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,6 +58,12 @@ const Dashboard = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chats, activeChat]);
+
+  useEffect(() => {
+    // Get user's first name from localStorage (set after login/signup)
+    const storedFirstName = localStorage.getItem("firstName");
+    if (storedFirstName) setFirstName(storedFirstName);
+  }, []);
 
   const handleSubmit = async () => {
     if (!prompt.trim() || activeChat === null) return;
@@ -212,7 +219,7 @@ const Dashboard = () => {
           <div className="flex-1 px-6 py-6 overflow-y-auto">
             {activeHistory.length === 0 && (
               <div className="flex items-center justify-center h-full text-white/60 text-lg font-medium">
-                No messages yet. Start the conversation!
+                Hey {firstName || "User"}, Start a new chat!
               </div>
             )}
             {activeHistory.map((msg, idx) => (

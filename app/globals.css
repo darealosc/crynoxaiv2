@@ -39,7 +39,6 @@ a.active {
   color: #f3f4f6;
 }
 
-/* Custom scrollbar for all elements */
 * {
   scrollbar-width: thin;
   scrollbar-color: #3b82f6 #181818;
