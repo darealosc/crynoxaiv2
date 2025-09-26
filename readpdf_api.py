@@ -8,6 +8,7 @@ from langchain.schema import Document
 from sys import argv
 import sys
 import os
+import json
 
 # Check if PDF file path is provided
 if len(argv) < 2:
@@ -21,12 +22,37 @@ if not os.path.exists(pdf_path):
     print(f"Error: PDF file '{pdf_path}' not found", file=sys.stderr)
     sys.exit(1)
 
+# Get subject hint from filename or default to general
+def detect_subject(filename):
+    filename_lower = filename.lower()
+    subjects = {
+        'biology': ['bio', 'biology', 'cell', 'dna', 'genetics', 'evolution', 'anatomy', 'physiology', 'macro'],
+        'chemistry': ['chem', 'chemistry', 'organic', 'inorganic', 'molecule', 'reaction', 'compound'],
+        'physics': ['phys', 'physics', 'mechanics', 'thermodynamics', 'quantum', 'wave', 'force'],
+        'mathematics': ['math', 'calculus', 'algebra', 'geometry', 'statistics', 'equation'],
+        'computer_science': ['cs', 'programming', 'algorithm', 'data', 'software', 'coding'],
+        'history': ['history', 'historical', 'war', 'ancient', 'medieval', 'revolution'],
+        'literature': ['literature', 'english', 'poetry', 'novel', 'shakespeare', 'writing'],
+        'psychology': ['psych', 'psychology', 'behavior', 'cognitive', 'mental'],
+        'economics': ['econ', 'economics', 'market', 'finance', 'trade', 'business']
+    }
+    
+    for subject, keywords in subjects.items():
+        for keyword in keywords:
+            if keyword in filename_lower:
+                return subject
+    return 'general'
+
 try:
     print(f"Processing PDF: {pdf_path}", file=sys.stderr)
     
-    # 1. Create the model and embeddings - SEPARATE MODELS
+    # Detect subject from filename
+    detected_subject = detect_subject(os.path.basename(pdf_path))
+    print(f"Detected subject: {detected_subject}", file=sys.stderr)
+    
+    # 1. Create the model and embeddings
     print("Creating Ollama model and embeddings...", file=sys.stderr)
-    llm = OllamaLLM(model='llama3.2-vision:latest')  # For text generation
+    llm = OllamaLLM(model='llama3.2-vision:latest')
     embeddings = OllamaEmbeddings(model='nomic-embed-text')  # For embeddings
 
     # 2. Try to load PDF with LangChain
