@@ -185,7 +185,7 @@ try:
         print("Error: No question provided", file=sys.stderr)
         sys.exit(1)
     
-    print("Processing question with AI...", file=sys.stderr)
+    print("Loading flashcards...", file=sys.stderr)
     answer = chain.invoke({'question': question})
     print(answer)
 
