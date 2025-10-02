@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import { Pool } from "pg";
 
-// Hardcoded DB credentials
 const pool = new Pool({
-  user: "postgres",
-  host: "81.0.219.54",
-  database: "userdb",
-  password: "darealosc",
-  port: 5432,
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: parseInt(process.env.PGPORT || "5432"),
 });
 
 export async function POST(req: Request) {
@@ -26,7 +25,7 @@ export async function POST(req: Request) {
       if (result.rows.length === 0) {
         return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
       }
-      // Return user info for localStorage if needed
+      // Return user info for localStorage 
       return NextResponse.json({
         id: result.rows[0].id,
         email: result.rows[0].email,

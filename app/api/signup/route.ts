@@ -3,11 +3,11 @@ import { Pool } from "pg";
 
 // Hardcoded DB credentials
 const pool = new Pool({
-  user: "postgres",
-  host: "81.0.219.54",
-  database: "userdb",
-  password: "darealosc",
-  port: 5432,
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: parseInt(process.env.PGPORT || "5432"),
 });
 
 export async function POST(req: Request) {

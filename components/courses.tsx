@@ -15,16 +15,13 @@ const coursesData = [
   {
     id: 1,
     title: "Global Studies I (Eng 9 & World Geography)",
-    teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/3B82F6/ffffff?text=Global+Studies",
-    color: "bg-blue-500",
+    teacher: "CodeRVA Regional High School",    color: "bg-blue-500",
     notifications: 3
   },
   {
     id: 2,
     title: "Biology - Nesbitt",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/10B981/ffffff?text=Biology",
     color: "bg-green-500",
     notifications: 1
   },
@@ -32,7 +29,6 @@ const coursesData = [
     id: 3,
     title: "French III (Virtual Virginia)",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/1E40AF/ffffff?text=French+III",
     color: "bg-blue-700",
     notifications: 0
   },
@@ -40,7 +36,6 @@ const coursesData = [
     id: 4,
     title: "Geometry - Minks",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/059669/ffffff?text=Geometry",
     color: "bg-green-600",
     notifications: 2
   },
@@ -48,7 +43,6 @@ const coursesData = [
     id: 5,
     title: "Computer Science Investigations",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/7C3AED/ffffff?text=CS+Investigations",
     color: "bg-purple-600",
     notifications: 5
   },
@@ -56,7 +50,6 @@ const coursesData = [
     id: 6,
     title: "Raptor Rotation 25-26",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/1D4ED8/ffffff?text=Raptor+Rotation",
     color: "bg-blue-600",
     notifications: 0
   },
@@ -64,7 +57,6 @@ const coursesData = [
     id: 7,
     title: "Health and PE 10",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/DC2626/ffffff?text=Health+PE",
     color: "bg-red-600",
     notifications: 1
   },
@@ -72,7 +64,6 @@ const coursesData = [
     id: 8,
     title: "9th Grade Academy 2025",
     teacher: "CodeRVA Regional High School",
-    image: "https://via.placeholder.com/300x200/7C2D12/ffffff?text=9th+Grade",
     color: "bg-orange-700",
     notifications: 0
   }
@@ -95,7 +86,7 @@ export function courses({ children }: { children?: React.ReactNode }) {
   ];
 
   return (
-    <div className="flex w-full h-screen transition-colors">
+    <div className="flex w-full h-screen transition-colors bg-grey-50 dark:bg-neutral-900">
       <Sidebar
         open={open}
         setOpen={setOpen}
@@ -253,7 +244,7 @@ const Dashboard = () => (
         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
         <span className="text-sm font-medium">8 Enrolled Courses</span>
       </div>
-      <div className="flex items-center gap-2 px-4 py-2 bg-orange-100 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 rounded-lg">
+    <div className="flex items-center gap-2 px-4 py-2 bg-orange-100 dark:bg-orange-900/20 text-red-700 dark:text-red-400 rounded-lg">
         <Clock className="h-4 w-4" />
         <span className="text-sm font-medium">12 Unfinished Assignments</span>
       </div>
@@ -267,11 +258,11 @@ const Dashboard = () => (
       {coursesData.map((course) => (
         <div
           key={course.id}
-          className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-gray-200 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer group"
+          className="bg-white dark:bg-neutral-800 rounded-md shadow-sm border border-gray-200 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer group"
         >
           <div className={cn("h-32 relative", course.color)}>
             <div className="absolute top-3 right-3">
-              <button className="w-8 h-8 bg-black/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+              <button className="w-8 h-8 bg-black/20 backdrop-blur-sm rounded-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
                 <MoreVertical className="h-4 w-4" />
               </button>
             </div>
