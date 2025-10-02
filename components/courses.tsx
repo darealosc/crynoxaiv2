@@ -21,21 +21,21 @@ const coursesData = [
   },
   {
     id: 2,
-    title: "Biology - Nesbitt",
+    title: "Biology",
     teacher: "Someone",
     color: "bg-green-500",
     notifications: 1
   },
   {
     id: 3,
-    title: "French III (Virtual Virginia)",
+    title: "French III (VIRTUAL)",
     teacher: "Someone",
     color: "bg-blue-700",
     notifications: 0
   },
   {
     id: 4,
-    title: "Geometry - Minks",
+    title: "Geometry",
     teacher: "Someone",
     color: "bg-green-600",
     notifications: 2
