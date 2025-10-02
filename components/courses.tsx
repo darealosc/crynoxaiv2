@@ -15,55 +15,56 @@ const coursesData = [
   {
     id: 1,
     title: "Global Studies I (Eng 9 & World Geography)",
-    teacher: "CodeRVA Regional High School",    color: "bg-blue-500",
+    teacher: "Someone",
+    color: "bg-blue-500",
     notifications: 3
   },
   {
     id: 2,
     title: "Biology - Nesbitt",
-    teacher: "CodeRVA Regional High School",
+    teacher: "Someone",
     color: "bg-green-500",
     notifications: 1
   },
   {
     id: 3,
     title: "French III (Virtual Virginia)",
-    teacher: "CodeRVA Regional High School",
+    teacher: "Someone",
     color: "bg-blue-700",
     notifications: 0
   },
   {
     id: 4,
     title: "Geometry - Minks",
-    teacher: "CodeRVA Regional High School",
+    teacher: "Someone",
     color: "bg-green-600",
     notifications: 2
   },
   {
     id: 5,
     title: "Computer Science Investigations",
-    teacher: "CodeRVA Regional High School",
+    teacher: "Someone",
     color: "bg-purple-600",
     notifications: 5
   },
-  {
-    id: 6,
-    title: "Raptor Rotation 25-26",
-    teacher: "CodeRVA Regional High School",
-    color: "bg-blue-600",
-    notifications: 0
-  },
+  // {
+  //   id: 6,
+  //   title: "Raptor Rotation 25-26",
+  //   teacher: "",
+  //   color: "bg-blue-600",
+  //   notifications: 0
+  // },
   {
     id: 7,
     title: "Health and PE 10",
-    teacher: "CodeRVA Regional High School",
+    teacher: "Someone",
     color: "bg-red-600",
     notifications: 1
   },
   {
     id: 8,
     title: "9th Grade Academy 2025",
-    teacher: "CodeRVA Regional High School",
+    teacher: "Someone",
     color: "bg-orange-700",
     notifications: 0
   }
