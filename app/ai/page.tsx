@@ -1,4 +1,4 @@
-import { AISidebar } from "@/components/settingssidebar";
+import { AISidebar } from "@/components/ai";
 
 export default function Home() {
   return <AISidebar />;

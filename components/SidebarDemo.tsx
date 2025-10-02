@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "./ui/sidebar";
 import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TextHoverEffectDemo } from "./TextHoverEffectDemo"
 import "../app/globals.css";
 import { signup } from "./form";
 const THEMES = {
@@ -21,7 +20,6 @@ const mainLinks = [
   { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
   { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },     
     { label: "AI", href: "/pages/ai", icon: <Bot className="h-5 w-5" /> },
-  { label: "Others", href: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
 ];
 
 

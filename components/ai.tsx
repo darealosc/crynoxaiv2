@@ -1,353 +1,171 @@
 "use client";
-  import React, { useEffect, useRef, useState } from "react";
-  import ReactMarkdown from "react-markdown";
-  import remarkGfm from "remark-gfm";
-  import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-  import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-  import { Clipboard, Trash2, Plus } from "lucide-react";
-  import "../app/globals.css";
+import React, { useState } from "react";
+import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "./ui/sidebar";
+import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown, HatGlasses } from "lucide-react";
+import { cn } from "@/lib/utils";
+import "../app/globals.css";
+import { signup } from "./form";
+const THEMES = {
+  light: { name: "Light" },
+  dark: { name: "Dark" },
+  rosepine: { name: "Rose Pine" },
+};
 
-  const CopyButton = ({ code }: { code: string }) => {
-    const [copied, setCopied] = useState(false);
-    const handleCopy = async () => {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    };
-    return (
-      <button
-        onClick={handleCopy}
-        className="absolute top-2 right-2 p-2 bg-neutral-800 text-white rounded-md hover:bg-neutral-700 transition"
+export function AISidebar({ children }: { children?: React.ReactNode }) {
+  const [open, setOpen] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [theme, setTheme] = useState("rosepine");
+
+const mainLinks = [
+  { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
+  { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },
+  { label: "AI", href: "/pages/ai", icon: <Bot className="h-5 w-5" /> },
+  { label: "Classes", href: "/classes", icon: <HatGlasses className="h-5 w-5" /> },
+
+];
+
+
+  const bottomLinks = [
+    { label: "Settings", href: "/", icon: <Settings className="h-5 w-5" /> },
+  ];
+
+  return (
+    <div className="flex w-full h-screen transition-colors">
+      <Sidebar
+        open={open}
+        setOpen={setOpen}
+        animate
+        className="relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <Clipboard className={`w-4 h-4 ${copied ? "text-green-400" : ""}`} />
-      </button>
-    );
-  };
-
-  // 🔹 Responsive Flashcard Component
-  function Flashcard({ card }: { card: { question: string; answer: string } }) {
-    const [flipped, setFlipped] = useState(false);
-
-    return (
-      <div
-        className="w-full max-w-md aspect-[4/3] bg-[#222] text-white rounded-2xl shadow-xl flex items-center justify-center text-center text-lg font-semibold cursor-pointer transition-all duration-500 p-4 overflow-auto"
-        onClick={() => setFlipped(!flipped)}
-      >
-        {!flipped ? `Q: ${card.question}` : `A: ${card.answer}`}
-      </div>
-    );
-  }
-
-  // 🔹 Multi-Card Viewer
-  function FlashcardViewer({ cards }: { cards: { question: string; answer: string }[] }) {
-    const [index, setIndex] = useState(0);
-    const card = cards[index];
-
-    const nextCard = () => setIndex((prev) => (prev + 1) % cards.length);
-    const prevCard = () => setIndex((prev) => (prev - 1 + cards.length) % cards.length);
-
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-full gap-4">
-        <Flashcard card={card} />
-        <div className="flex gap-4 flex-wrap justify-center">
-          <button
-            onClick={prevCard}
-            className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white"
-          >
-            ⬅ Prev
-          </button>
-          <button
-            onClick={nextCard}
-            className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white"
-          >
-            Next ➡
-          </button>
-        </div>
-        <div className="text-sm text-gray-400">
-          {index + 1} / {cards.length}
-        </div>
-      </div>
-    );
-  }
-
-  const Dashboard = () => {
-    const [prompt, setPrompt] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [chats, setChats] = useState<
-      { id: number; history: { role: "user" | "assistant"; content: string; type?: "chat" | "flashcards" }[] }[]
-    >([]);
-    const [activeChat, setActiveChat] = useState<number | null>(null);
-    const [firstName, setFirstName] = useState<string>("");
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      const stored = localStorage.getItem("ai-chats");
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        setChats(parsed);
-        if (parsed.length > 0) setActiveChat(parsed[0].id);
-      }
-    }, []);
-
-    useEffect(() => {
-      if (chats.length === 0) {
-        const id = Date.now();
-        setChats([{ id, history: [] }]);
-        setActiveChat(id);
-      }
-    }, [chats.length]);
-
-    useEffect(() => {
-      localStorage.setItem("ai-chats", JSON.stringify(chats));
-    }, [chats]);
-
-    useEffect(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [chats, activeChat]);
-
-    useEffect(() => {
-      const storedFirstName = localStorage.getItem("firstName");
-      if (storedFirstName) setFirstName(storedFirstName);
-    }, []);
-
-    // 🔹 Submit normal chat
-    const handleSubmit = async () => {
-      if (!prompt.trim() || activeChat === null) return;
-      await runOllama(prompt, "chat");
-    };
-
-    // 🔹 Submit flashcards
-    const handleFlashcards = async () => {
-      if (!prompt.trim() || activeChat === null) return;
-
-      const flashcardPrompt = `
-      Create concise Q&A flashcards from the following text.
-      Return only JSON in this format:
-      [
-        { "question": "Question text", "answer": "Answer text" }
-      ]
-      Text:
-      ${prompt}
-      `;
-
-      await runOllama(flashcardPrompt, "flashcards");
-    };
-
-    // 🔹 Ollama runner
-    const runOllama = async (input: string, type: "chat" | "flashcards") => {
-      const userMessage = { role: "user" as const, content: prompt, type };
-      const assistantMessage = { role: "assistant" as const, content: "", type };
-
-      setChats((prev) =>
-        prev.map((chat) =>
-          chat.id === activeChat
-            ? { ...chat, history: [...chat.history, userMessage, assistantMessage] }
-            : chat
-        )
-      );
-
-      setPrompt("");
-      setLoading(true);
-
-      try {
-        const response = await fetch("http://localhost:11434/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: "llama3",
-            messages: [
-              ...(chats.find((c) => c.id === activeChat)?.history || []),
-              { role: "user", content: input },
-            ],
-            stream: true,
-          }),
-        });
-
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let fullText = "";
-
-        while (reader) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n").filter(Boolean);
-
-          for (const line of lines) {
-            const data = JSON.parse(line);
-            if (data.done) {
-              setLoading(false);
-              break;
-            }
-            const token = data.message?.content || "";
-            fullText += token;
-
-            setChats((prev) =>
-              prev.map((chat) =>
-                chat.id === activeChat
-                  ? {
-                      ...chat,
-                      history: chat.history.map((msg, i) =>
-                        msg.role === "assistant" &&
-                        i === chat.history.length - 1
-                          ? { ...msg, content: fullText, type }
-                          : msg
-                      ),
-                    }
-                  : chat
-              )
-            );
-          }
-        }
-      } catch (err) {
-        console.error("Ollama error:", err);
-        setLoading(false);
-      }
-    };
-
-    const newChat = () => {
-      const id = Date.now();
-      setChats([{ id, history: [] }, ...chats]);
-      setActiveChat(id);
-      setPrompt("");
-    };
-
-    const deleteChat = (id: number) => {
-      const updated = chats.filter((c) => c.id !== id);
-      setChats(updated);
-      setActiveChat(updated.length > 0 ? updated[0].id : null);
-    };
-
-    const activeHistory =
-      activeChat === null
-        ? []
-        : chats.find((c) => c.id === activeChat)?.history || [];
-
-    return (
-      <div className="flex items-center justify-center min-h-screen w-full p-4 bg-[#181818]">
-        <div className="flex flex-row w-full max-w-6xl h-[90vh] mx-auto gap-4">
-          {/* Sidebar */}
-          <div className="w-[320px] flex flex-col bg-[#181818] rounded-xl p-4 shadow border border-[#333] h-full">
-            <div className="flex items-center justify-between mb-2">
-              <button onClick={newChat} className="p-2 rounded bg-[#222] text-white text-lg">
-                <Plus />
-              </button>
-              {activeChat !== null && (
-                <button
-                  onClick={() => deleteChat(activeChat)}
-                  className="p-2 rounded bg-[#222] text-red-400"
-                >
-                  <Trash2 />
-                </button>
-              )}
-            </div>
-            <div className="flex-1 overflow-y-auto">
-              {chats.map((chat) => (
-                <div key={chat.id} className="mb-2">
-                  <button
-                    className={`w-full text-left px-3 py-2 rounded bg-[#222] text-white text-sm ${
-                      activeChat === chat.id
-                        ? "border border-blue-500"
-                        : "border border-transparent"
-                    }`}
-                    onClick={() => setActiveChat(chat.id)}
-                  >
-                    {chat.history[0]?.content || "New chat"}
-                  </button>
-                </div>
+        <SidebarBody className="flex flex-col justify-between h-full py-4 px-3 relative">
+          <div className="flex flex-col gap-6">
+            <LogoWithText />
+            <div className="flex flex-col gap-1">
+              {mainLinks.map((link, idx) => (
+                <SidebarLink
+                  key={idx}
+                  link={link}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2 rounded-lg transition-all",
+                    "hover:bg-base-200 dark:hover:bg-neutral-800",
+                    "text-gray-800 dark:text-gray-200"
+                  )}
+                />
               ))}
             </div>
           </div>
 
-          {/* Chat / Flashcards Area */}
-          <div className="flex flex-col flex-1 h-full bg-[#222] rounded-xl shadow border border-[#333]">
-            <div className="flex-1 px-6 py-6 overflow-y-auto">
-              {activeHistory.length === 0 && (
-                <div className="flex items-center justify-center h-full text-white/60 text-lg font-medium">
-                  Hey {firstName || "User"}, Start a new chat!
-                </div>
-              )}
-              {activeHistory.map((msg, idx) => (
-                <div key={idx} className="mb-6 w-full flex flex-col gap-2">
-                  <div
-                    className={`max-w-[80%] px-5 py-4 rounded-xl ${
-                      msg.role === "user" ? "bg-[#181818]" : "bg-[#333]"
-                    } text-white self-start`}
-                  >
-                    <div className="text-xs font-semibold mb-1">
-                      {msg.role === "user" ? "You:" : "AI:"}
-                    </div>
-
-                    {/* 🔹 Flashcard Renderer */}
-                    {msg.type === "flashcards" && msg.role === "assistant" ? (
-                      (() => {
-                        // Try to extract JSON array from the message content
-                        try {
-                          // Find the first '[' and last ']' to extract the JSON array
-                          const start = msg.content.indexOf("[");
-                          const end = msg.content.lastIndexOf("]");
-                          if (start !== -1 && end !== -1) {
-                            const jsonStr = msg.content.slice(start, end + 1);
-                            const cards = JSON.parse(jsonStr);
-                            return (
-                              <div>
-                                <div className="mb-4 text-base text-blue-300 font-semibold">
-                                  Flashcards
-                                </div>
-                                <FlashcardViewer cards={cards} />
-                              </div>
-                            );
-                          }
-                          // fallback if JSON not found
-                          return <pre>{msg.content}</pre>;
-                        } catch {
-                          return <pre>{msg.content}</pre>;
-                        }
-                      })()
-                    ) : (
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {msg.content}
-                      </ReactMarkdown>
-                    )}
-                  </div>
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input Area */}
-            <div className="px-6 py-4 border-t border-[#333] bg-[#181818] flex gap-2 rounded-b-2xl rounded-t-3xl flex-wrap">
-              <input
-                type="text"
-                className="flex-1 min-w-[150px] h-12 px-4 rounded-md bg-[#222] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Ask something or paste study text..."
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) handleSubmit();
-                }}
+          <div className="flex flex-col gap-1 relative">
+            {bottomLinks.map((link, idx) => (
+              <SidebarLink
+                key={idx}
+                link={link}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-base-200 dark:hover:bg-neutral-800 text-gray-800 dark:text-gray-200"
               />
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-500 disabled:opacity-50"
-              >
-                {loading ? "..." : "Send"}
-              </button>
-              <button
-                onClick={handleFlashcards}
-                disabled={loading}
-                className="px-4 py-2 rounded bg-green-600 text-white font-semibold hover:bg-green-500 disabled:opacity-50"
-              >
-                {loading ? "..." : "Flashcards"}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+            ))}
 
-  export default function AIPage() {
-    return <Dashboard />;
-  }
+            <CustomDropdown
+              hovered={hovered}
+              theme={theme}
+              setTheme={setTheme}
+            />
+          </div>
+        </SidebarBody>
+      </Sidebar>
+
+      <main className="flex flex-1 p-6 md:p-10 rounded-xl shadow-inner overflow-auto">
+        {children ?? <Dashboard />}
+      </main>
+    </div>
+  );
+}
+
+const CustomDropdown = ({
+  hovered,
+  theme,
+  setTheme,
+}: {
+  hovered: boolean;
+  theme: string;
+  setTheme: (val: string) => void;
+}) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div
+      className={cn(
+        "absolute bottom-14 left-0 right-0 px-3 transition-all duration-300",
+        hovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"
+      )}
+    >
+      <div className="relative">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-full flex items-center justify-between bg-base-200 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-lg shadow-md"
+        >
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 transition-transform",
+              open ? "rotate-180" : "rotate-0"
+            )}
+          />
+        </button>
+
+        {open && (
+          <ul className="absolute left-0 right-0 mt-2 bg-base-100 dark:bg-neutral-900 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 z-50">
+            {Object.entries(THEMES).map(([key, val]) => (
+              <li
+                key={key}
+                onClick={() => {
+                  setTheme(key);
+                  setOpen(false);
+                }}
+                className={cn(
+                  "px-3 py-2 cursor-pointer hover:bg-base-200 dark:hover:bg-neutral-800 rounded-md",
+                  theme === key ? "font-semibold bg-base-200 dark:bg-neutral-800" : ""
+                )}
+              >
+                {val.name}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const LogoWithText = () => {
+  const { open, animate } = useSidebar();
+  return (
+    <a href="#" className="flex items-center gap-3 px-2">
+      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 shadow-md">
+        <img
+          src="https://ih1.redbubble.net/image.1023214784.7024/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
+          alt="Logo"
+          className="object-cover w-full h-full"
+        />
+      </div>
+      <span
+        className={cn(
+          "text-lg font-bold text-neutral-800 dark:text-neutral-200 whitespace-nowrap transition-all duration-300",
+          animate
+            ? open
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-2 w-0 overflow-hidden"
+            : "opacity-100"
+        )}
+      >
+        learn.ai
+      </span>
+    </a>
+  );
+};
+
+const Dashboard = () => (
+  <div className="flex flex-col items-center justify-center w-full h-full text-gray-800 dark:text-gray-200 bg-mono-50 dark:bg-neutral-900 rounded-lg">
+    <input type="text" placeholder="Ask me anything..." className="w-full max-w-2xl px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100" />
+  </div>
+);
