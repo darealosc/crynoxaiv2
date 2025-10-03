@@ -1,10 +1,9 @@
-import Aiapp from "@/components/ai";
-import Chat from "@/components/Chat";
+import { AISidebar } from "@/components/ai";
 
 export default function Home() {
   return (
     <div className="flex h-screen">
-      <Aiapp />
+      <AISidebar />
     </div>
   );
 }

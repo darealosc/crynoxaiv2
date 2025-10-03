@@ -79,7 +79,7 @@ export function courses({ children }: { children?: React.ReactNode }) {
     { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
     { label: "Tools", href: "/pages/tools", icon: <Hammer className="h-5 w-5" /> },
     { label: "AI", href: "/pages/ai", icon: <Bot className="h-5 w-5" /> },
-    { label: "Classes", href: "/pages/classes", icon: <HatGlasses className="h-5 w-5" /> },
+    { label: "Classes", href: "/classes", icon: <HatGlasses className="h-5 w-5" /> },
   ];
 
   const bottomLinks = [

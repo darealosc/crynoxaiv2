@@ -1,20 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink, useSidebar } from "./ui/sidebar";
-import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown, HatGlasses } from "lucide-react";
+import { Home, Bot, Hammer, LayoutDashboard, Settings, Search, ChevronDown, HatGlasses, HammerIcon, Upload, FileText, BookOpen, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import "../app/globals.css";
 import { signup } from "./form";
-const THEMES = {
-  light: { name: "Light" },
-  dark: { name: "Dark" },
-  rosepine: { name: "Rose Pine" },
-};
 
 export function AISidebar({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(true);
-  const [hovered, setHovered] = useState(false);
-  const [theme, setTheme] = useState("rosepine");
 
 const mainLinks = [
   { label: "Home", href: "/", icon: <Home className="h-5 w-5" /> },
@@ -36,8 +29,6 @@ const mainLinks = [
         setOpen={setOpen}
         animate
         className="relative"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
       >
         <SidebarBody className="flex flex-col justify-between h-full py-4 px-3 relative">
           <div className="flex flex-col gap-6">
@@ -65,12 +56,6 @@ const mainLinks = [
                 className="flex items-center gap-3 px-3 py-2 rounded-lg transition-all hover:bg-base-200 dark:hover:bg-neutral-800 text-gray-800 dark:text-gray-200"
               />
             ))}
-
-            <CustomDropdown
-              hovered={hovered}
-              theme={theme}
-              setTheme={setTheme}
-            />
           </div>
         </SidebarBody>
       </Sidebar>
@@ -81,61 +66,6 @@ const mainLinks = [
     </div>
   );
 }
-
-const CustomDropdown = ({
-  hovered,
-  theme,
-  setTheme,
-}: {
-  hovered: boolean;
-  theme: string;
-  setTheme: (val: string) => void;
-}) => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <div
-      className={cn(
-        "absolute bottom-14 left-0 right-0 px-3 transition-all duration-300",
-        hovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"
-      )}
-    >
-      <div className="relative">
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-full flex items-center justify-between bg-base-200 dark:bg-neutral-800 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-lg shadow-md"
-        >
-          <ChevronDown
-            className={cn(
-              "h-4 w-4 transition-transform",
-              open ? "rotate-180" : "rotate-0"
-            )}
-          />
-        </button>
-
-        {open && (
-          <ul className="absolute left-0 right-0 mt-2 bg-base-100 dark:bg-neutral-900 rounded-lg shadow-lg border border-gray-200 dark:border-neutral-700 z-50">
-            {Object.entries(THEMES).map(([key, val]) => (
-              <li
-                key={key}
-                onClick={() => {
-                  setTheme(key);
-                  setOpen(false);
-                }}
-                className={cn(
-                  "px-3 py-2 cursor-pointer hover:bg-base-200 dark:hover:bg-neutral-800 rounded-md",
-                  theme === key ? "font-semibold bg-base-200 dark:bg-neutral-800" : ""
-                )}
-              >
-                {val.name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-};
 
 const LogoWithText = () => {
   const { open, animate } = useSidebar();
@@ -165,7 +95,41 @@ const LogoWithText = () => {
 };
 
 const Dashboard = () => (
-  <div className="flex flex-col items-center justify-center w-full h-full text-gray-800 dark:text-gray-200 bg-mono-50 dark:bg-neutral-900 rounded-lg">
-    <input type="text" placeholder="Ask me anything..." className="w-full max-w-2xl px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100" />
+  <div className="flex flex-col items-center justify-center w-full h-full text-gray-800 dark:text-gray-200 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 rounded-lg relative overflow-hidden">
+
+    {/* Glass input */}
+    <div className="relative z-10 w-full max-w-2xl">
+      <div className="relative">
+        <input 
+          type="text" 
+          placeholder="Ask me anything..." 
+          className="w-full px-4 py-3 pr-12 bg-white/20 dark:bg-black/20 backdrop-blur-xl border border-white/30 dark:border-white/10 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 text-gray-900 dark:text-gray-100 placeholder-gray-600 dark:placeholder-gray-300" 
+        />
+        <button className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <Send className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+    
+    {/* Glass shortcut cards */}
+    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-2xl relative z-10">
+      <div className="p-6 bg-white/10 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/20 dark:hover:bg-black/20 transition-all duration-300 cursor-pointer group">
+        <FileText className="h-8 w-8 text-blue-400 mb-3 " />
+        <p className="font-semibold text-gray-800 dark:text-gray-100">Upload an Assignment</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Submit your homework</p>
+      </div>
+      
+      <div className="p-6 bg-white/10 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/20 dark:hover:bg-black/20 transition-all duration-300 cursor-pointer group">
+        <Upload className="h-8 w-8 text-green-400 mb-3 group-hover:scale-110 transition-transform duration-300" />
+        <p className="font-semibold text-gray-800 dark:text-gray-100">Upload a File</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Add documents or resources</p>
+      </div>
+      
+      <div className="p-6 bg-white/10 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/20 dark:hover:bg-black/20 transition-all duration-300 cursor-pointer group">
+        <BookOpen className="h-8 w-8 text-purple-400 mb-3 group-hover:scale-110 transition-transform duration-300" />
+        <p className="font-semibold text-gray-800 dark:text-gray-100">Set a Course</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Configure your learning path</p>
+      </div>
+    </div>
   </div>
 );
